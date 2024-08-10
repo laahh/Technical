@@ -51,17 +51,18 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
+        //Mengambil Elemen Form dan Mencegah Pengiriman Default
         $('#login-form').on('submit', function(e) {
             e.preventDefault();
 
-            var form = $(this);
-            var url = '{{ route('login') }}';
-            var method = 'POST';
+            var form = $(this);  //menyimpan form login ke variabel form
+            var url = '{{ route('login') }}'; //menyimpan url login
+            var method = 'POST'; //menyimpan method login
 
             $.ajax({
-                url: url,
+                url: url, 
                 type: method,
-                data: form.serialize(),
+                data: form.serialize(), //mengirimkan form login
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },

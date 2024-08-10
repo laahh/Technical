@@ -24,6 +24,7 @@ class SendWelcomeEmail implements ShouldQueue
         $this->customer = $customer;
     }
 
+    //mengirim email menggunakan data pelanggan ketika job diproses.
     public function handle()
     {
         Mail::to($this->customer->email)->send(new CustomerMail($this->customer));

@@ -100,6 +100,7 @@
 
 
 <script>
+    // konfigurasi ajax
     $(document).ready(function(){
         $.ajaxSetup({
             headers: {
@@ -112,7 +113,7 @@
         var table = $('#customerTable').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ route('customers.index') }}",
+            ajax: "{{ route('customers.index') }}", // URL untuk mengambil data
             columns: [
                 {data: 'user_id', name: 'user_id'},
                 {data: 'name', name: 'name'},
@@ -122,21 +123,25 @@
             ]
         });
 
+        // Set judul modal dan tombol simpan
         $('#modal-title').html('Create Customer');
         $('#saveBtn').html('Save Customer');
+
+        // Ambil form
         var form =  $('#ajaxForm')[0];
 
+        //Event click untuk tombol simpan
         $('#saveBtn').click(function(){
-            var formData = new FormData(form);
+            var formData = new FormData(form); // Ambil data dari form
             
             $.ajax({
-                url:'{{ Route("customers.store") }}',
-                method: 'POST',
+                url:'{{ Route("customers.store") }}', // URL untuk menambahkan data
+                method: 'POST', // Metode POST
                 
-                processData : false,
-                contentType : false,
-                data: formData,
-                success: function(response){
+                processData : false, // Menonaktifkan proses pengolahan data
+                contentType : false, // Menonaktifkan pengolahan konten
+                data: formData, // Data yang akan dikirim
+                success: function(response){ 
                     if(response.success) {
                         Swal.fire({
                             title: 'Created!',
@@ -181,13 +186,16 @@
         })
     });
 
-
+    //edit
+    // event untuk tombol edit
     $('body').on('click', '.edit', function () {
-        var id = $(this).data('id'); // Gunakan 'id' sesuai dengan atribut 'data-id'
+        var id = $(this).data('id'); //Ambil id dari atribut data-id
+
+        // Kirim permintaan AJAX untuk mendapatkan data
         $.ajax({
-            url: "{{ route('customers.edit', ':id') }}".replace(':id', id),
-            type: 'GET',
-            dataType: 'json',
+            url: "{{ route('customers.edit', ':id') }}".replace(':id', id), // URL untuk edit data
+            type: 'GET', // Metode GET
+            dataType: 'json', 
             success: function (data) {
                 $('#customer_id').val(data.customer.user_id);
                 $('#name').val(data.customer.name);

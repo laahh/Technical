@@ -24,7 +24,7 @@ class AuthController extends Controller
         // Ambil kredensial dari request
         $credentials = $request->only('name', 'password');
 
-        // Coba login tanpa remember
+        // Cek autentikasi
         if (Auth::attempt($credentials)) {
             // Jika login berhasil dan request AJAX, kirim respon JSON
             if ($request->ajax()) {

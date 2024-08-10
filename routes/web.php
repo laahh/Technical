@@ -37,6 +37,10 @@ Route::put('customers/update/{id}', [CustomerController::class, 'update'])->name
 
 
 // dashboard
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
 Route::get('/api/customers', [DashboardController::class, 'getCustomerData']);
 
+// landingpage
+Route::get('/{any}', function () {
+    return view('landingpage.index');
+})->where('any', '.*');

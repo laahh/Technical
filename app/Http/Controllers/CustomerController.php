@@ -48,19 +48,23 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
 
+        //pengecekan apakah customer_id ada atau tidak
         if ($request->customer_id) {
             $customer = Customer::find($request->customer_id);
+
+            // Jika customer_id tidak ditemukan, kembalikan respon JSON dengan pesan error
             if (!$customer) {
                 return response()->json(['error' => 'Customer not found.'], 404);
             }
 
+            // Update customer jika customer_id ditemukan
             $customer->update([
                 'name' => $request->name,
                 'email' => $request->email,
                 'status' => $request->status ?? 'LOYAL CUSTOMER'
             ]);
 
-
+            // Dispatch job to send welcome email
             SendLoyalCustomerEmail::dispatch($customer);
             // Mengirim notifikasi ke Telegram
             $message = "🔔 Update Status Customer\n\n"
@@ -89,8 +93,9 @@ class CustomerController extends Controller
             }
             // Generate unique user_id based on today's date and current count
             $today = now()->format('dmY');
-            $customerCountToday = Customer::whereDate('created_at', now()->format('Y-m-d'))->count();
+            $customerCountToday = Customer::whereDate('created_at', now()->format('Y-m-d'))->count(); 
             $user_id = $today . str_pad($customerCountToday + 1, 3, '0', STR_PAD_LEFT);
+
 
             // Create or update customer
             $customer = Customer::create([
